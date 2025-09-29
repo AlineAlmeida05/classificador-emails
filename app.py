@@ -1,21 +1,31 @@
-import cohere
-from flask import Flask, request, render_template, jsonify
 import os
+import cohere
 import PyPDF2
-from transformers import pipeline
 import nltk
+from flask import Flask, request, render_template, jsonify
+from transformers import pipeline
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+from dotenv import load_dotenv
 
+# Carregar variáveis de ambiente
+load_dotenv()
+
+# Baixar recursos do NLTK
 nltk.download('stopwords')
 nltk.download('wordnet')
 
+# Inicializar Flask
 app = Flask(__name__)
 
-co = cohere.Client('IxVcL0zkh1v158H2nEHvxYAkEy3yFdI0jWYHTzk8')
+# Inicializar Cohere com chave segura
+COHERE_API_KEY = os.getenv('COHERE_API_KEY')
+co = cohere.Client(COHERE_API_KEY)
 
+# Inicializar classificador
 classifier = pipeline("text-classification", model="nlptown/bert-base-multilingual-uncased-sentiment")
 
+# Pré-processamento de texto
 def preprocess_text(text):
     stop_words = set(stopwords.words('portuguese'))
     lemmatizer = WordNetLemmatizer()
@@ -23,6 +33,7 @@ def preprocess_text(text):
     words = [lemmatizer.lemmatize(w) for w in words if w.lower() not in stop_words]
     return ' '.join(words)
 
+# Extração de texto de arquivos
 def extract_text(file):
     if file.filename.endswith('.pdf'):
         pdf = PyPDF2.PdfReader(file)
@@ -30,38 +41,42 @@ def extract_text(file):
         for page in pdf.pages:
             text += page.extract_text()
         return text
-    else:
-        return file.read().decode('utf-8')
+    return file.read().decode('utf-8')
 
+# Limitar tamanho do texto
 def limitar_texto(texto, max_tokens=512):
     palavras = texto.split()
-    if len(palavras) > max_tokens:
-        return ' '.join(palavras[:max_tokens])
-    return texto
+    return ' '.join(palavras[:max_tokens]) if len(palavras) > max_tokens else texto
 
+# Gerar resposta automática com Cohere
 def gerar_resposta_cohere(texto, categoria):
-    prompt = f"Email recebido:\n{texto}\nCategoria: {categoria}\nGere uma resposta automática breve e educada em português do Brasil para este email."
+    prompt = (
+        f"Email recebido:\n{texto}\n"
+        f"Categoria: {categoria}\n"
+        f"Gere uma resposta automática breve e educada em português do Brasil para este email."
+    )
     try:
-        response = co.chat(
-            message=prompt,
-            temperature=0.7
-        )
+        response = co.chat(message=prompt, temperature=0.7)
         return response.text.strip()
     except Exception as e:
         return f"Erro Cohere: {str(e)}"
 
+# Rota principal
 @app.route('/')
 def index():
     return render_template('index.html')
 
+# Rota de processamento
 @app.route('/process', methods=['POST'])
 def process():
     text = ""
-    if 'emailFile' in request.files and request.files['emailFile'].filename != '':
-        file = request.files['emailFile']
+    file = request.files.get('emailFile')
+    email_text = request.form.get('emailText', '').strip()
+
+    if file and file.filename != '':
         text = extract_text(file)
-    elif 'emailText' in request.form and request.form['emailText'].strip() != '':
-        text = request.form['emailText']
+    elif email_text:
+        text = email_text
     else:
         return jsonify({'error': 'Nenhum texto fornecido.'}), 400
 
@@ -69,10 +84,7 @@ def process():
     processed = preprocess_text(texto_limitado)
     result = classifier(processed)[0]
     categoria = "Produtivo" if result['label'] in ['4 stars', '5 stars'] else "Improdutivo"
-
     resposta = gerar_resposta_cohere(text, categoria)
 
     return jsonify({'categoria': categoria, 'resposta': resposta})
 
-if __name__ == '__main__':
-    app.run(debug=True)

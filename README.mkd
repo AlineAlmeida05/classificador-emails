@@ -32,6 +32,7 @@ A interface web permite ao usuário:
 - [Bootstrap 5](https://getbootstrap.com/)
 - [PyPDF2](https://pypi.org/project/PyPDF2/)
 - [NLTK](https://www.nltk.org/)
+- [Gunicorn](https://gunicorn.org/)
 
 ---
 
@@ -44,10 +45,13 @@ cd seu-repositorio
 
 # Crie e ative o ambiente virtual
 python -m venv .venv
-source .venv/bin/activate  # ou .venv\Scripts\activate no Windows
+# Ativação no Windows:
+.venv\Scripts\activate
+# Ou no macOS/Linux:
+source .venv/bin/activate
 
 # Instale as dependências
 pip install -r requirements.txt
 
-# Execute a aplicação
+# Execute a aplicação localmente
 python app.py

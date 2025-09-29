@@ -1,5 +1,6 @@
 
     .fade {
+      opacity: 0;
       transition: opacity 0.5s ease-in-out;
     }
      body {
@@ -8,9 +9,13 @@
     color: #343a40;
   }
 
+  .fade.show {
+  opacity: 1;
+}
   h2 {
     font-weight: 700;
-    color: #0d6efd; /* azul Bootstrap */
+    color: #0056b3;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.1);
   }
 
   .form-label {
@@ -31,6 +36,8 @@
   .card-body {
     font-size: 1.1rem;
     color: #212529;
+    background-color: #f1f9ff;
+    border-radius: 0.5rem;
   }
 
   .badge.bg-danger {
@@ -42,3 +49,14 @@
     font-weight: bold;
     font-size: 1rem;
   }
+.card {
+  word-wrap: break-word;
+}
+form > .mb-3 {
+  margin-bottom: 2.5rem;
+}
+
+footer {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
