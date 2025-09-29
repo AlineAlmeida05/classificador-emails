@@ -1,0 +1,44 @@
+
+    .fade {
+      transition: opacity 0.5s ease-in-out;
+    }
+     body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+  }
+
+  h2 {
+    font-weight: 700;
+    color: #0d6efd; /* azul Bootstrap */
+  }
+
+  .form-label {
+    font-weight: 500;
+    color: #495057;
+  }
+
+  .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+  }
+
+  .btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+  }
+
+  .card-body {
+    font-size: 1.1rem;
+    color: #212529;
+  }
+
+  .badge.bg-danger {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
+  .badge.bg-info {
+    font-weight: bold;
+    font-size: 1rem;
+  }

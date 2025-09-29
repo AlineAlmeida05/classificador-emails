@@ -1,0 +1,53 @@
+# 📬 Classificador de Emails
+
+Este projeto é uma aplicação web desenvolvida com **Flask**, **Cohere AI** e **Transformers**, que classifica emails como **produtivos** ou **improdutivos** e sugere uma resposta automática em português do Brasil.
+
+---
+
+## 🚀 Funcionalidades
+
+- Upload de arquivos `.txt` ou `.pdf`
+- Inserção manual de texto
+- Classificação de conteúdo com modelo BERT multilingue
+- Geração de resposta automática via API Cohere
+- Interface responsiva com Bootstrap 5
+
+---
+
+## 🖼️ Interface
+
+A interface web permite ao usuário:
+
+- Selecionar um arquivo ou digitar o conteúdo do email
+- Visualizar a categoria atribuída (com cores dinâmicas)
+- Receber uma resposta sugerida automaticamente
+
+---
+
+## 🛠️ Tecnologias utilizadas
+
+- [Flask](https://flask.palletsprojects.com/)
+- [Transformers (HuggingFace)](https://huggingface.co/)
+- [Cohere API](https://cohere.com/)
+- [Bootstrap 5](https://getbootstrap.com/)
+- [PyPDF2](https://pypi.org/project/PyPDF2/)
+- [NLTK](https://www.nltk.org/)
+
+---
+
+## 📦 Instalação local
+
+```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/seu-repositorio.git
+cd seu-repositorio
+
+# Crie e ative o ambiente virtual
+python -m venv .venv
+source .venv/bin/activate  # ou .venv\Scripts\activate no Windows
+
+# Instale as dependências
+pip install -r requirements.txt
+
+# Execute a aplicação
+python app.py
