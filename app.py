@@ -29,4 +29,16 @@ classifier = pipeline("text-classification", model="nlptown/bert-base-multilingu
 def preprocess_text(text):
     stop_words = set(stopwords.words('portuguese'))
     lemmatizer = WordNetLemmatizer()
-    words = text.split
+    words = text.split()
+    processed = [lemmatizer.lemmatize(w.lower()) for w in words if w.lower() not in stop_words]
+    return " ".join(processed)
+
+# Rota de exemplo (você pode adaptar conforme sua lógica)
+@app.route("/")
+def home():
+    return "Aplicação Flask rodando com sucesso no Render!"
+
+# Rodar servidor Flask na porta esperada pelo Render
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
